@@ -44,6 +44,16 @@
           <span>or click to choose a local file</span>
         </label>
 
+        <details class="log-guide">
+          <summary>Where is my Codex CLI rollout?</summary>
+          <div>
+            <p>Choose one recent <code>rollout-*.jsonl</code> file:</p>
+            <p><strong>Linux / macOS / WSL</strong><br /><code>~/.codex/sessions/YYYY/MM/DD/</code></p>
+            <p><strong>Windows</strong><br /><code>%USERPROFILE%\.codex\sessions\YYYY\MM\DD\</code></p>
+            <p class="guide-warning">Use a personal, non-sensitive session. Do not use company logs or logs containing confidential data.</p>
+          </div>
+        </details>
+
         <div class="or"><span>OR PASTE</span></div>
         <label class="sr-only" for="logInput">Paste JSON or JSONL</label>
         <textarea id="logInput" spellcheck="false" placeholder='[{"model":"claude-opus-4-6","usage":{"input_tokens":33000}}]'></textarea>

@@ -66,6 +66,12 @@ h2, h3, p { text-wrap: pretty; }
 .drop-zone input { position: absolute; opacity: 0; pointer-events: none; }
 .drop-zone strong { color: var(--ink); }
 .drop-icon { color: var(--accent); font: 400 2.2rem/1 Georgia, serif; }
+.log-guide { margin-top: 14px; border: 1px solid var(--line); background: #fffef9; }
+.log-guide summary { padding: 12px 14px; color: var(--accent-dark); font-weight: 750; cursor: pointer; }
+.log-guide > div { padding: 0 14px 14px; color: var(--muted); font-size: .84rem; }
+.log-guide p { margin: 9px 0 0; }
+.log-guide code { overflow-wrap: anywhere; }
+.log-guide .guide-warning { color: var(--red); font-weight: 700; }
 .or { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--muted); font: 700 .66rem/1 ui-monospace, monospace; letter-spacing: .12em; }
 .or::before, .or::after { content: ""; height: 1px; flex: 1; background: var(--line); }
 textarea { width: 100%; min-height: 168px; resize: vertical; border: 1px solid var(--line); background: #fffef9; padding: 16px; color: var(--ink); font: .78rem/1.55 ui-monospace, "SFMono-Regular", Consolas, monospace; }
