@@ -1,0 +1,15 @@
+{
+  "recorded_at": "2026-07-14T08:59:29Z",
+  "channel": "GitHub issue openai/codex#27131",
+  "publication_url": "https://github.com/openai/codex/issues/27131#issuecomment-4967194567",
+  "baseline_before_publication": {
+    "page_view": 8,
+    "sample_loaded": 2,
+    "file_selected": 3,
+    "own_log_parse_succeeded": 3,
+    "own_log_parse_failed": 0,
+    "receipt_generated": 5,
+    "feedback_clicked": 0
+  },
+  "note": "All baseline events are internal setup/browser tests and do not count as external user evidence. Only increments after publication can be investigated as external candidates; anonymous counters alone cannot prove user identity."
+}
