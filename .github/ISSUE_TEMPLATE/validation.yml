@@ -1,0 +1,60 @@
+name: RepoMeter Lite validation feedback
+description: Tell us whether a local AI coding receipt would solve a real problem. Do not attach private logs or source code.
+title: "[Validation] "
+labels: [validation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing RepoMeter Lite. Please do **not** paste private logs, source code, credentials, or company data here.
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Which AI coding tool do you use most?
+      options:
+        - Claude Code
+        - Codex CLI
+        - OpenCode
+        - Cursor
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What did you want to verify?
+      options:
+        - Token or cost overhead
+        - Repeated or wasteful tool calls
+        - Which files were accessed
+        - Sensitive file access
+        - A shareable audit receipt
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: redacted-log
+    attributes:
+      label: Would you privately share a redacted log for an early test?
+      options:
+        - Yes
+        - Maybe, if the redaction process is clear
+        - No
+    validations:
+      required: true
+  - type: dropdown
+    id: pay
+    attributes:
+      label: If this worked across your tools, would you pay for it?
+      options:
+        - Yes, as a one-time report
+        - Yes, as a team tool
+        - Maybe
+        - No
+    validations:
+      required: true
+  - type: textarea
+    id: missing
+    attributes:
+      label: What is missing from the current receipt?
+      placeholder: One concrete thing that would make this useful.
