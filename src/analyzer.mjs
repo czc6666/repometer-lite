@@ -33,6 +33,8 @@ function modelOf(event) {
 function redactPath(path) {
   const normalized = path.replaceAll('\\', '/');
   const parts = normalized.split('/').filter(Boolean);
+  const isAbsolute = normalized.startsWith('/') || /^[A-Za-z]:\//.test(normalized);
+  if (isAbsolute) return `…/${parts.slice(-2).join('/')}`;
   if (parts.length <= 2) return normalized;
   return `…/${parts.slice(-2).join('/')}`;
 }

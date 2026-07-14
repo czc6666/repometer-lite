@@ -59,6 +59,14 @@ test('analyzeEvents totals tokens and reports repeated file access without expos
   assert.ok(report.estimatedCostUsd > 0);
 });
 
+test('absolute short paths are also redacted', () => {
+  const report = analyzeEvents([
+    { tool: { name: 'Read', path: '/tmp/demo.js' } },
+  ]);
+  assert.equal(report.files[0].displayPath, '…/tmp/demo.js');
+  assert.equal(report.files[0].displayPath.startsWith('/'), false);
+});
+
 test('analyzeEvents flags high startup load, repeated reads, and sensitive paths', () => {
   const report = analyzeEvents([
     ...sampleEvents,
