@@ -1,5 +1,5 @@
 import { analyzeEvents, formatUsd, parseLogText } from './analyzer.mjs';
-import { isCodexRolloutText, parseCodexRollout } from './codex-adapter.mjs';
+import { analyzeCodexDiagnostics, isCodexRolloutText, parseCodexRollout } from './codex-adapter.mjs';
 import { createTelemetry } from './telemetry.mjs';
 
 const telemetry = createTelemetry();
@@ -79,6 +79,13 @@ function analyze() {
         : 'Paste a JSON / JSONL log or load the sample first.');
     }
     const report = analyzeEvents(events);
+    if (codexRollout) {
+      const diagnostics = analyzeCodexDiagnostics(source);
+      const noAnomalyIndex = report.findings.findIndex((item) => item.code === 'NO_OBVIOUS_ANOMALY');
+      if (diagnostics.findings.length && noAnomalyIndex >= 0) report.findings.splice(noAnomalyIndex, 1);
+      report.findings.unshift(...diagnostics.findings);
+      report.caveats.push('Codex self-log detection inspects command strings locally only, records a count, and discards the command text.');
+    }
     render(report);
     void telemetry.track('receipt_generated', {
       eventCount: report.totals.events,

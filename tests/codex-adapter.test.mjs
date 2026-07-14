@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseCodexRollout } from '../src/codex-adapter.mjs';
+import { analyzeCodexDiagnostics, parseCodexRollout } from '../src/codex-adapter.mjs';
 
 const codexLog = [
   {
@@ -83,6 +83,40 @@ test('Codex adapter never produces negative uncached input when counters are inc
   const events = parseCodexRollout(text);
   assert.equal(events[0].usage.input_tokens, 0);
   assert.equal(events[0].usage.cache_read_tokens, 40);
+});
+
+test('Codex diagnostics detect self-log ingestion without retaining command text', () => {
+  const text = [
+    JSON.stringify({
+      timestamp: '2026-07-14T00:00:00Z', type: 'response_item',
+      payload: { type: 'function_call', name: 'exec_command', arguments: JSON.stringify({ cmd: "sed -n '1,80p' ~/.codex/sessions/2026/07/14/rollout-secret.jsonl" }) },
+    }),
+    JSON.stringify({
+      timestamp: '2026-07-14T00:00:01Z', type: 'response_item',
+      payload: { type: 'function_call_output', output: 'private transcript content', call_id: 'x' },
+    }),
+  ].join('\n');
+  const result = analyzeCodexDiagnostics(text);
+  assert.equal(result.selfLogReads, 1);
+  assert.equal(result.findings.some((item) => item.code === 'CODEX_SELF_LOG_READ'), true);
+  assert.equal(JSON.stringify(result).includes('rollout-secret'), false);
+  assert.equal(JSON.stringify(result).includes('private transcript'), false);
+});
+
+test('Codex diagnostics detect sharp per-turn input growth', () => {
+  const token = (input, cached, timestamp) => JSON.stringify({
+    timestamp, type: 'event_msg', payload: { type: 'token_count', info: {
+      last_token_usage: { input_tokens: input, cached_input_tokens: cached, output_tokens: 10 },
+    } },
+  });
+  const result = analyzeCodexDiagnostics([
+    token(23000, 4000, 'a'),
+    token(24000, 5000, 'b'),
+    token(101000, 52000, 'c'),
+  ].join('\n'));
+  assert.equal(result.maxInputTokens, 101000);
+  assert.equal(result.largestInputJump, 77000);
+  assert.equal(result.findings.some((item) => item.code === 'SHARP_INPUT_GROWTH'), true);
 });
 
 test('Codex adapter ignores messages, prompts, outputs, and malformed lines', () => {
