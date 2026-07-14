@@ -1,0 +1,55 @@
+[
+  {
+    "timestamp": "2026-07-13T10:00:00Z",
+    "provider": "anthropic",
+    "model": "claude-opus-4-6",
+    "usage": {
+      "input_tokens": 33000,
+      "output_tokens": 1200,
+      "cache_read_tokens": 8000
+    },
+    "tool": {
+      "name": "Read",
+      "path": "/Users/demo/acme/src/app.ts"
+    }
+  },
+  {
+    "timestamp": "2026-07-13T10:01:00Z",
+    "provider": "anthropic",
+    "model": "claude-opus-4-6",
+    "usage": {
+      "input_tokens": 12000,
+      "output_tokens": 900
+    },
+    "tool": {
+      "name": "Read",
+      "path": "/Users/demo/acme/src/app.ts"
+    }
+  },
+  {
+    "timestamp": "2026-07-13T10:02:00Z",
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "usage": {
+      "input_tokens": 7000,
+      "output_tokens": 600
+    },
+    "tool": {
+      "name": "Bash",
+      "path": "/Users/demo/acme/scripts/deploy.sh"
+    }
+  },
+  {
+    "timestamp": "2026-07-13T10:03:00Z",
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "usage": {
+      "input_tokens": 500,
+      "output_tokens": 10
+    },
+    "tool": {
+      "name": "Read",
+      "path": "/Users/demo/acme/.env"
+    }
+  }
+]

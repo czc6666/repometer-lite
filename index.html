@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Generate a local AI coding cost and file-access receipt from JSON or JSONL session logs." />
+  <title>RepoMeter Lite — AI coding session receipts</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="RepoMeter Lite home">
+      <span class="brand-mark" aria-hidden="true">RM</span>
+      <span>RepoMeter Lite</span>
+    </a>
+    <span class="local-badge">Local-only prototype</span>
+  </header>
+
+  <main id="top">
+    <section class="intro" aria-labelledby="headline">
+      <p class="eyebrow">AI CODING COST & FILE-ACCESS RECEIPT</p>
+      <h1 id="headline">See what the session cost.<br />See what it touched.</h1>
+      <p class="lede">Drop a JSON or JSONL export from an AI coding session. RepoMeter totals logged tokens, estimates model cost, highlights repeated reads, and redacts full file paths before display.</p>
+      <div class="privacy-line">
+        <strong>Your file never leaves this browser.</strong>
+        <span>No account. No upload API. No source-code parsing.</span>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Analyze a session log">
+      <div class="input-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="step">01 / INPUT</p>
+            <h2>Session log</h2>
+          </div>
+          <button id="sampleButton" class="text-button" type="button">Load sample</button>
+        </div>
+
+        <label id="dropZone" class="drop-zone" for="fileInput">
+          <input id="fileInput" type="file" accept=".json,.jsonl,.ndjson,text/plain,application/json" />
+          <span class="drop-icon" aria-hidden="true">↓</span>
+          <strong>Drop JSON / JSONL here</strong>
+          <span>or click to choose a local file</span>
+        </label>
+
+        <div class="or"><span>OR PASTE</span></div>
+        <label class="sr-only" for="logInput">Paste JSON or JSONL</label>
+        <textarea id="logInput" spellcheck="false" placeholder='[{"model":"claude-opus-4-6","usage":{"input_tokens":33000}}]'></textarea>
+        <button id="analyzeButton" class="primary-button" type="button">Generate local receipt</button>
+        <p id="errorMessage" class="error-message" role="alert" hidden></p>
+      </div>
+
+      <div class="preview-panel" aria-live="polite">
+        <div class="panel-heading">
+          <div>
+            <p class="step">02 / RECEIPT</p>
+            <h2>What you get</h2>
+          </div>
+        </div>
+        <ol class="preview-list">
+          <li><span>Token & cost summary</span><small>By model and session</small></li>
+          <li><span>File-access scope</span><small>Full local paths redacted</small></li>
+          <li><span>Waste signals</span><small>Startup load and repeated reads</small></li>
+          <li><span>Shareable report</span><small>Print or save as PDF</small></li>
+        </ol>
+        <p class="boundary-note">This receipt only describes events present in your log. It is not a security guarantee.</p>
+      </div>
+    </section>
+
+    <section id="report" class="report" hidden aria-labelledby="reportTitle">
+      <div class="receipt-top">
+        <div>
+          <p class="step">LOCAL RECEIPT</p>
+          <h2 id="reportTitle">Session summary</h2>
+          <p id="generatedAt" class="muted"></p>
+        </div>
+        <button id="printButton" class="secondary-button" type="button">Print / Save PDF</button>
+      </div>
+
+      <div id="metricGrid" class="metric-grid"></div>
+
+      <div class="report-grid">
+        <section class="report-block">
+          <div class="block-title"><h3>Findings</h3><span id="findingCount"></span></div>
+          <div id="findings"></div>
+        </section>
+        <section class="report-block">
+          <div class="block-title"><h3>Models</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Model</th><th>Input</th><th>Output</th><th>Est. cost</th></tr></thead>
+              <tbody id="modelRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <section class="report-block file-block">
+        <div class="block-title"><h3>Logged file scope</h3><span>redacted locally</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Displayed path</th><th>Accesses</th><th>Tools</th><th>Flag</th></tr></thead>
+            <tbody id="fileRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="caveats">
+        <h3>Receipt boundary</h3>
+        <ul id="caveatList"></ul>
+      </section>
+    </section>
+
+    <section class="validation-callout">
+      <div>
+        <p class="step">EARLY VALIDATION</p>
+        <h2>Does this solve a real problem for you?</h2>
+        <p>This prototype is testing one narrow promise: a trustworthy, vendor-neutral receipt for AI coding sessions.</p>
+      </div>
+      <a class="primary-button link-button" href="mailto:repometer.feedback@proton.me?subject=RepoMeter%20Lite%20feedback&body=Tool%20used%3A%0AWhat%20I%20wanted%20to%20verify%3A%0AWould%20I%20share%20a%20redacted%20log%3A%20yes%2Fno%0A">Send feedback</a>
+    </section>
+  </main>
+
+  <footer>
+    <span>RepoMeter Lite · validation build</span>
+    <span>Logs stay in your browser</span>
+  </footer>
+
+  <script type="module" src="./src/app.mjs"></script>
+</body>
+</html>
