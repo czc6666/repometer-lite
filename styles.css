@@ -110,6 +110,7 @@ code { color: var(--accent-dark); }
 .caveats li + li { margin-top: 8px; }
 .validation-callout { display: grid; grid-template-columns: 1fr auto; gap: 36px; align-items: end; margin: 80px 0; padding: 38px; color: white; background: var(--ink); }
 .validation-callout p:not(.step) { margin-bottom: 0; color: #c9c8c2; }
+.validation-callout .telemetry-note { max-width: 760px; font-size: .78rem; color: #aaa9a3; }
 .validation-callout .step { color: #ef9276; }
 .link-button { display: grid; place-items: center; width: auto; min-width: 170px; margin: 0; color: var(--ink); background: white; text-decoration: none; }
 footer { min-height: 82px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }

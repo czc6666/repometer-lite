@@ -1,4 +1,9 @@
 import { analyzeEvents, formatUsd, parseLogText } from './analyzer.mjs';
+import { createTelemetry } from './telemetry.mjs';
+
+const telemetry = createTelemetry();
+let inputSource = 'paste';
+void telemetry.track('page_view');
 
 const elements = {
   input: document.querySelector('#logInput'),
@@ -16,6 +21,7 @@ const elements = {
   caveats: document.querySelector('#caveatList'),
   generatedAt: document.querySelector('#generatedAt'),
   print: document.querySelector('#printButton'),
+  feedback: document.querySelector('#feedbackButton'),
 };
 
 const integer = new Intl.NumberFormat('en-US');
@@ -65,28 +71,46 @@ function analyze() {
   try {
     const events = parseLogText(elements.input.value);
     if (!events.length) throw new Error('Paste a JSON / JSONL log or load the sample first.');
-    render(analyzeEvents(events));
+    const report = analyzeEvents(events);
+    render(report);
+    void telemetry.track('receipt_generated', {
+      eventCount: report.totals.events,
+      fileCount: report.totals.uniqueFiles,
+    });
+    if (inputSource === 'file') {
+      void telemetry.track('own_log_parse_succeeded', {
+        eventCount: report.totals.events,
+        fileCount: report.totals.uniqueFiles,
+      });
+    }
   } catch (error) {
     elements.error.textContent = error instanceof Error ? error.message : String(error);
     elements.error.hidden = false;
+    if (inputSource === 'file') void telemetry.track('own_log_parse_failed');
   }
 }
 
 async function readFile(file) {
   if (!file) return;
+  inputSource = 'file';
+  void telemetry.track('file_selected');
   elements.input.value = await file.text();
   elements.error.hidden = true;
 }
 
 elements.analyze.addEventListener('click', analyze);
+elements.input.addEventListener('input', () => { inputSource = 'paste'; });
 elements.file.addEventListener('change', (event) => readFile(event.target.files?.[0]));
 elements.sample.addEventListener('click', async () => {
+  inputSource = 'sample';
+  void telemetry.track('sample_loaded');
   const response = await fetch('./sample/session.json');
   if (!response.ok) throw new Error('Could not load the sample log.');
   elements.input.value = await response.text();
   analyze();
 });
 elements.print.addEventListener('click', () => window.print());
+elements.feedback.addEventListener('click', () => { void telemetry.track('feedback_clicked'); });
 
 for (const type of ['dragenter', 'dragover']) {
   elements.drop.addEventListener(type, (event) => {
