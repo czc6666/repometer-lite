@@ -42,10 +42,10 @@ function metric(label, value, note) {
 
 function render(report) {
   elements.metrics.innerHTML = [
-    metric('Input tokens', integer.format(report.totals.inputTokens), 'logged'),
+    metric('Input tokens', integer.format(report.totals.inputTokens), 'uncached, when reported'),
+    metric('Cached input', integer.format(report.totals.cacheReadTokens), 'reported separately'),
     metric('Output tokens', integer.format(report.totals.outputTokens), 'logged'),
-    metric('Estimated cost', formatUsd(report.estimatedCostUsd), 'editable price assumptions'),
-    metric('File scope', integer.format(report.totals.uniqueFiles), `${report.totals.toolCalls} tool calls`),
+    metric('Tool calls', integer.format(report.totals.toolCalls), `${report.totals.uniqueFiles} structured file paths`),
   ].join('');
 
   elements.findingCount.textContent = `${report.findings.length} signal${report.findings.length === 1 ? '' : 's'}`;
@@ -54,7 +54,7 @@ function render(report) {
     .join('');
 
   elements.models.innerHTML = report.models
-    .map((model) => `<tr><td>${escapeHtml(model.model)}</td><td>${integer.format(model.inputTokens)}</td><td>${integer.format(model.outputTokens)}</td><td>${formatUsd(model.estimatedCostUsd)}</td></tr>`)
+    .map((model) => `<tr><td>${escapeHtml(model.model)}</td><td>${integer.format(model.inputTokens)}</td><td>${integer.format(model.cacheReadTokens)}</td><td>${integer.format(model.outputTokens)}</td></tr>`)
     .join('') || '<tr><td colspan="4">No model usage found in this log.</td></tr>';
 
   elements.files.innerHTML = report.files

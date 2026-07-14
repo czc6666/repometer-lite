@@ -102,11 +102,13 @@ export function analyzeEvents(events, options = {}) {
       events: 0,
       inputTokens: 0,
       outputTokens: 0,
+      cacheReadTokens: 0,
       estimatedCostUsd: 0,
     };
     modelRow.events += 1;
     modelRow.inputTokens += usage.input;
     modelRow.outputTokens += usage.output;
+    modelRow.cacheReadTokens += usage.cacheRead;
     modelRow.estimatedCostUsd +=
       (usage.input / 1_000_000) * price.input +
       (usage.output / 1_000_000) * price.output +
@@ -178,7 +180,7 @@ export function analyzeEvents(events, options = {}) {
     findings,
     caveats: [
       'All analysis runs locally in this browser.',
-      'Cost is an estimate based on editable default prices and logged token fields.',
+      'Token buckets reflect logged fields. ChatGPT plan limits are not API dollar charges, so this receipt does not convert subscription usage into money.',
       'A missing path or token field cannot be inferred from the log.',
     ],
   };

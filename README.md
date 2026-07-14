@@ -33,6 +33,10 @@ Generic recognized fields include common variants of:
 
 The browser processes files locally. The MVP has no upload server.
 
+## Real local example
+
+A sanitized receipt generated from one personal Codex rollout is documented in [`docs/real-codex-receipt.md`](docs/real-codex-receipt.md). It separates uncached input, cached input, output, and tool calls without retaining transcript content.
+
 ## Validation boundary
 
-This is an external-demand MVP, not a production security scanner. It estimates cost from logged fields and cannot infer events omitted by the source tool.
+This is an external-demand MVP, not a production security scanner. It reports token buckets from logged fields and cannot infer events omitted by the source tool. ChatGPT subscription quota consumption is not the same thing as API dollar cost.

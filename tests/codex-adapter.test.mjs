@@ -51,7 +51,7 @@ test('Codex rollout adapter uses token_count deltas and model context', () => {
     provider: 'openai',
     model: 'gpt-5.4',
     usage: {
-      input_tokens: 100,
+      input_tokens: 60,
       output_tokens: 20,
       cache_read_tokens: 40,
     },
@@ -69,6 +69,20 @@ test('Codex rollout adapter counts tools without retaining arguments or private 
   });
   assert.equal(JSON.stringify(events).includes('private.txt'), false);
   assert.equal(JSON.stringify(events).includes('cat '), false);
+});
+
+test('Codex adapter never produces negative uncached input when counters are inconsistent', () => {
+  const text = JSON.stringify({
+    timestamp: '2026-07-14T00:00:01Z',
+    type: 'event_msg',
+    payload: {
+      type: 'token_count',
+      info: { last_token_usage: { input_tokens: 10, cached_input_tokens: 40, output_tokens: 2 } },
+    },
+  });
+  const events = parseCodexRollout(text);
+  assert.equal(events[0].usage.input_tokens, 0);
+  assert.equal(events[0].usage.cache_read_tokens, 40);
 });
 
 test('Codex adapter ignores messages, prompts, outputs, and malformed lines', () => {

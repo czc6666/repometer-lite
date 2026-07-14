@@ -40,14 +40,17 @@ export function parseCodexRollout(text) {
     if (record.type === 'event_msg' && payload.type === 'token_count') {
       const usage = payload.info?.last_token_usage;
       if (!usage || typeof usage !== 'object') continue;
+      const cachedInput = positive(usage.cached_input_tokens);
       events.push({
         timestamp: record.timestamp,
         provider: 'openai',
         model,
         usage: {
-          input_tokens: positive(usage.input_tokens),
+          // Codex input_tokens includes cached input. Normalize to uncached
+          // input so the analyzer can display and price each bucket once.
+          input_tokens: Math.max(0, positive(usage.input_tokens) - cachedInput),
           output_tokens: positive(usage.output_tokens),
-          cache_read_tokens: positive(usage.cached_input_tokens),
+          cache_read_tokens: cachedInput,
         },
       });
       continue;

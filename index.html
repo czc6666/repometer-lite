@@ -20,7 +20,7 @@
     <section class="intro" aria-labelledby="headline">
       <p class="eyebrow">AI CODING COST & FILE-ACCESS RECEIPT</p>
       <h1 id="headline">See what the session cost.<br />See what it touched.</h1>
-      <p class="lede">Drop a native Codex CLI rollout or generic JSON / JSONL session export. RepoMeter totals logged tokens, estimates model cost, highlights tool-call overhead, and reports file scope when the log exposes structured paths.</p>
+      <p class="lede">Drop a native Codex CLI rollout or generic JSON / JSONL session export. RepoMeter separates uncached input, cached input, output, and tool-call counts, then reports file scope when the log exposes structured paths.</p>
       <div class="privacy-line">
         <strong>Your file never leaves this browser.</strong>
         <span>No account. No upload API. No source-code parsing.</span>
@@ -69,7 +69,7 @@
           </div>
         </div>
         <ol class="preview-list">
-          <li><span>Token & cost summary</span><small>By model and session</small></li>
+          <li><span>Token usage breakdown</span><small>Uncached input, cached input, and output</small></li>
           <li><span>File-access scope</span><small>Full local paths redacted</small></li>
           <li><span>Waste signals</span><small>Startup load and repeated reads</small></li>
           <li><span>Shareable report</span><small>Print or save as PDF</small></li>
@@ -99,7 +99,7 @@
           <div class="block-title"><h3>Models</h3></div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Model</th><th>Input</th><th>Output</th><th>Est. cost</th></tr></thead>
+              <thead><tr><th>Model</th><th>Uncached input</th><th>Cached input</th><th>Output</th></tr></thead>
               <tbody id="modelRows"></tbody>
             </table>
           </div>
