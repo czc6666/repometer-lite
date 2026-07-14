@@ -1,4 +1,5 @@
 import { analyzeEvents, formatUsd, parseLogText } from './analyzer.mjs';
+import { isCodexRolloutText, parseCodexRollout } from './codex-adapter.mjs';
 import { createTelemetry } from './telemetry.mjs';
 
 const telemetry = createTelemetry();
@@ -69,8 +70,14 @@ function render(report) {
 function analyze() {
   elements.error.hidden = true;
   try {
-    const events = parseLogText(elements.input.value);
-    if (!events.length) throw new Error('Paste a JSON / JSONL log or load the sample first.');
+    const source = elements.input.value;
+    const codexRollout = isCodexRolloutText(source);
+    const events = codexRollout ? parseCodexRollout(source) : parseLogText(source);
+    if (!events.length) {
+      throw new Error(codexRollout
+        ? 'This Codex rollout contains no token or tool-call events yet.'
+        : 'Paste a JSON / JSONL log or load the sample first.');
+    }
     const report = analyzeEvents(events);
     render(report);
     void telemetry.track('receipt_generated', {
